@@ -1,0 +1,17 @@
+{
+  "name": "lab-03",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-status-codes": "^1.4.0",
+    "jest": "^26.0.1"
+  }
+}
