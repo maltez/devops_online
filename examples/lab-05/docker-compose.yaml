@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+  mongo:
+    image: mongo:latest
+    networks: 
+      - main
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pwd
+
+  mongo-express:
+    image: mongo-express:latest
+    networks: 
+      - main
+    ports: 
+      - 8081:8081
+    environment: 
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pwd
+
+  node-app:
+    build: .
+    env_file: .dev.env
+    ports: 
+      - 3000:3000
+    networks: 
+      - temp
+      - main
+
+
+networks:
+  main:
+    driver: bridge
+  temp:
+    driver: bridge
