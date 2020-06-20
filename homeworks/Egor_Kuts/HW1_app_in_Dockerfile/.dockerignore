@@ -1,0 +1,4 @@
+.dockerignore
+CustomPort.Dockerfile
+DefaultPort.Dockerfile
+**/*.jpg
