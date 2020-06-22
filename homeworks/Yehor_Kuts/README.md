@@ -1,4 +1,4 @@
-Egor Kuts folder with homeworks
+Yehor Kuts folder with homeworks
 
 Contacts:
 - [mail](mailto:liraykh@gmail.com)
