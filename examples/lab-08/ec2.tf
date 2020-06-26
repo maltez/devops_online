@@ -1,4 +1,4 @@
-data "aws_ami" "my_ami" {
+data "aws_ami" "aws_linux" {
   owners = ["amazon"]
   most_recent = true
 
@@ -9,14 +9,17 @@ data "aws_ami" "my_ami" {
 }
 
 resource "aws_instance" "main" {
-  ami = data.aws_ami.my_ami.id
+  ami = data.aws_ami.aws_linux.id
   instance_type = "t2.micro"
+
   associate_public_ip_address = true
   subnet_id = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.allow_ping.id]
+
   tags = {
-    Name = "For delete"
+    Name = "To delete"
   }
+
   depends_on = [aws_security_group.allow_ping]
 }
 

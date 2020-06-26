@@ -1,0 +1,15 @@
+[
+  {
+    "cpu": ${cpu},
+    "image": "${image}",
+    "memory": ${memory},
+    "name": "${name}",
+    "networkMode": "awsvpc",
+    "portMappings": [
+      {
+        "containerPort": ${port},
+        "hostPort": ${port}
+      }
+    ]
+  }
+]

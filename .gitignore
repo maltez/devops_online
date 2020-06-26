@@ -1,4 +1,6 @@
 # Logs
+.terraform/
+.idea/
 logs
 *.log
 npm-debug.log*
