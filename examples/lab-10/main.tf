@@ -15,7 +15,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   count                   = length(data.aws_availability_zones.available.names)
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + 3)
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + length(data.aws_availability_zones.available.names))
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
@@ -39,8 +39,8 @@ resource "aws_eip" "gw" {
 
 resource "aws_nat_gateway" "gw" {
   count         = length(data.aws_availability_zones.available.names)
-  allocation_id = element(aws_eip.gw.*.id, count.index)
-  subnet_id     = element(aws_subnet.public.*.id, count.index)
+  allocation_id = aws_eip.gw[count.index].id
+  subnet_id     = aws_subnet.public[count.index].id
 }
 
 resource "aws_route_table" "private" {
