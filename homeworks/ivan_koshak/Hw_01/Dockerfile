@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:lts
 
 LABEL NAME="ikote/dind"
-LABEL VERSION="0.0.1"
+LABEL VERSION="0.0.2"
 LABEL MAINTAINER="iKote"
 
 USER root
