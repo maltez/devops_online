@@ -1,0 +1,56 @@
+version: "2.3"
+
+
+services:
+        nginx:
+             image: tutum/nginx
+             container_name: nginx
+             ports:
+                - "80:80"
+             links:
+                - php-fpm
+             volumes:
+                - ./nginx/default:/etc/nginx/sites-available/default
+                - ./nginx/default:/etc/nginx/sites-enabled/default
+                - ./logs/nginx-access.log:/var/log/nginx/access.log
+                - ./logs/nginx-error.log:/var/log/nginx/error.log
+        
+        php-fpm:
+             build:
+                context: .
+                dockerfile: ./php-fpm/Dockerfile
+             container_name: php-fpm
+             ports:
+                - "9000:9000"
+             volumes:
+                - ./public:/application/public
+             depends_on:
+                - mysql
+
+        mysql:
+             image: mysql:5.7
+             container_name: mysql
+             volumes:
+                - ./mysql/mydb:/var/lib/mysql
+             environment:
+                - MYSQL_ROOT_PASSWORD=toor
+                - MYSQL_DATABASE=php_mysql
+                - MYSQL_USER=php_user
+                - MYSQL_PASSWORD=qwer_2020
+             ports:
+                - "3306:3306"
+
+        phpmyadmin:
+             image: phpmyadmin/phpmyadmin
+             container_name: pma
+             links:
+                - mysql
+             environment:
+                - MYSQL_USER=php_user
+                - MYSQL_PASSWORD=qwer_2020
+                - MYSQL_ROOT_PASSWORD=toor
+             restart: always
+             ports:
+                - "8183:80"
+ 
+
