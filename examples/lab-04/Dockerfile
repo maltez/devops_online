@@ -7,5 +7,6 @@ FROM scratch
 WORKDIR /server
 COPY --from=build /src/server .
 
+
 EXPOSE 9000
 ENTRYPOINT ["/server/server"]

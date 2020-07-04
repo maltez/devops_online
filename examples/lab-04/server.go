@@ -6,17 +6,21 @@ import (
 	"net/http"
 )
 
-func HomeRouterHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+func homeRouterHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Panic("Parse with err\n")
+	}
+
 	fmt.Println(r.Form)
 	fmt.Println("path", r.URL.Path)
 	fmt.Println("scheme", r.URL.Scheme)
 
-	fmt.Println(w, "Hello Nick")
+	fmt.Println(w, "Hello VasCos")
 }
 
 func main() {
-	http.HandleFunc("/", HomeRouterHandler)
+	http.HandleFunc("/", homeRouterHandler)
 
 	err := http.ListenAndServe(":9000", nil)
 
