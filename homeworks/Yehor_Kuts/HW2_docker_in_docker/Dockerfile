@@ -1,7 +1,8 @@
 FROM docker:latest
 
-LABEL Maintainer = "Egor Kuts"
-LABEL version = 0.0.1
+LABEL NAME = "kutsegor/python_server"
+LABEL VERSION = "0.0.2"
+LABEL MAITAINER = "Egor Kuts"
 
 RUN apk add curl mc
 

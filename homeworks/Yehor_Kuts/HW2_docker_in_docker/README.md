@@ -1,4 +1,7 @@
-# Build customized Image
+HW1:
+![Alt text](HW2.jpg?raw=true "Title")
+
+## Build customized Image
 1. Docker build container vith docker and utilities
 ```
 docker build -t kutsegor/docker:latest .
@@ -35,7 +38,12 @@ docker exec -i ekuts_docker sh <<< "docker run -d --network host --name python_s
 docker logs -f python_server
 ```
 
-6. Login inside to container if you needed:
+6. Open python app in your browser:
+```
+http://0.0.0.0:7001/
+```
+
+7. Login inside to container if you needed:
 ```
 docker exec -it ekuts_docker sh
 ```
