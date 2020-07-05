@@ -1,8 +1,11 @@
 FROM python:latest
 
-LABEL Maintainer = "Egor Kuts"
-LABEL version = 0.0.1
+LABEL NAME = "kutsegor/python_server_custom_port"
+LABEL VERSION = "0.0.2"
+LABEL MAITAINER = "Egor Kuts"
 
 COPY server.py index.html /
+EXPOSE 7006
 
 ENTRYPOINT [ "python", "server.py" ]
+CMD [ "7006" ]
