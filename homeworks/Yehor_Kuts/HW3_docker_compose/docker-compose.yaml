@@ -1,0 +1,36 @@
+version: "3.5"
+
+services:
+  go-app:
+    container_name: go_app
+    image: kutsegor/server_go
+    networks:
+      - main
+    hostname: go_app
+    build:
+        context: ./docker/go-app
+        dockerfile: Dockerfile
+        args:
+            buildno: 1
+    ports:
+      - 9000:9000
+
+  py-app:
+    container_name: py_app
+    image: kutsegor/server_python
+    networks:
+      - app_network
+    hostname: py_app
+    build:
+        context: ./docker/py-app
+        dockerfile: Dockerfile
+        args:
+            buildno: 1
+    ports:
+      - 7001:7001
+
+networks:
+  main:
+    driver: bridge
+  app_network:
+    driver: bridge
