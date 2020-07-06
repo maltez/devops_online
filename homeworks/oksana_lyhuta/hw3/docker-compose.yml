@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  go-app:
+    driver: bridge
+  node-app:
+    driver: bridge
+
+services:
+
+  go-server:
+      restart: unless-stopped
+      container_name: go_server
+      ports:
+          - 9000:9000
+      networks:
+      - go-app
+      build:
+        context: .
+        dockerfile: Dockerfile_go
+
+  node-server:
+      restart: unless-stopped
+      container_name: node_server
+      ports:
+          - 8083:8083
+      networks:
+      - node-app
+      build:
+        context: .
+        dockerfile: Dockerfile_node
