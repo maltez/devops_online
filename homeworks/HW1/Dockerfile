@@ -5,8 +5,8 @@ LABEL VERSION="0.0.1"
 LABEL MAINTAINER="VasCos"
 
 WORKDIR /src
-COPY ["hw1.go", "./"]
+COPY . .
 RUN CGO_ENABLED=0 go build hw1.go
 
 ENTRYPOINT ["/src/hw1"]
-CMD [ "987654321" ]
+CMD ["987654321"]
