@@ -1,0 +1,17 @@
+FROM node:10-alpine
+
+LABEL NAME = "oksana/simple-node-server"
+LABEL VERSION="0.0.1"
+LABEL MAINTAINER="Oksana Lyhuta"
+
+WORKDIR /app
+
+COPY package.json /app
+
+RUN npm install
+
+COPY . /app
+
+EXPOSE 8083
+
+CMD [ "node", "index.js" ]
