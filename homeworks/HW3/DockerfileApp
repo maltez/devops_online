@@ -1,0 +1,17 @@
+FROM golang:alpine3.11 AS build
+
+WORKDIR /src
+COPY app.go .
+RUN CGO_ENABLED=0 go build app.go
+
+FROM scratch
+
+LABEL NAME="vasylkosiv/app"
+LABEL VERSION="0.0.1"
+LABEL MAINTAINER="VasCos"
+
+WORKDIR /app
+COPY --from=build /src/app .
+
+ENTRYPOINT ["/app/app"]
+CMD ["987654321"]

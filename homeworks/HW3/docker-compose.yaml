@@ -1,0 +1,28 @@
+version: '3.3'
+networks:
+  server-go:
+    driver: bridge
+  app-go:
+    driver: bridge
+services:
+  server:
+    build: 
+      dockerfile: DockerfileServer
+      context: .
+    ports: 
+      - 9000:9000
+    
+    networks: 
+      - server-go
+  
+  app:
+    build: 
+      dockerfile: DockerfileApp
+      context: .
+    
+    networks: 
+      - app-go
+     
+  
+  
+  
