@@ -13,6 +13,3 @@ HEALTHCHECK --interval=5s --timeout=3s --start-period=3s --retries=3 CMD [ "ping
 
 ENTRYPOINT [ "npm", "run" ]
 CMD [ "start" ]
-
-
-

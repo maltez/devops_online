@@ -1,0 +1,11 @@
+FROM alpine:3.12 AS docs
+
+ARG TAG=vasylkosiv/lab5
+ARG VERSION=0.0.1
+ARG MAINTAINER=VasCos
+
+WORKDIR /docs
+RUN echo "Created image ${TAG}. Version ${VERSION}. Maintainer ${MAINTAINER}." >> docs1.txt
+RUN echo "Created image ${TAG}. Version ${VERSION}. Maintainer ${MAINTAINER}." >> docs2.txt
+
+
