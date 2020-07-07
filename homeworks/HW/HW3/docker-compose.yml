@@ -1,0 +1,45 @@
+version: '3.1'
+
+networks:
+  my_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.14.100.0/24
+
+  maltez_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.15.200.0/24
+
+services:
+
+  my_stolen_app:
+    image: hw3
+    restart: "no"
+    ports:
+      - 8080:8080
+    networks:
+      my_net:
+        ipv4_address: 172.14.100.100
+    build:
+      context: ./my_app/
+
+
+  maltez_go_app:
+    image: maltez/simple-node-server
+    restart: "no"
+    ports:
+      - 3000:3000
+    depends_on:
+        - my_stolen_app
+    networks:
+      maltez_net:
+        ipv4_address: 172.15.200.100
+    build:
+      context: ./maltez_app/
+
+
