@@ -1,0 +1,13 @@
+{
+  "name": "docker_app_HW1",
+  "version": "1.0.0",
+  "description": "app on docker",
+  "author": "bla-bla@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
