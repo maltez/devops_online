@@ -1,17 +1,9 @@
-FROM golang:alpine3.11 AS build
+FROM jenkins/jenkins:lts
 
-WORKDIR /src
-COPY hw1.go .
-RUN CGO_ENABLED=0 go build hw1.go
+USER root
+RUN apt-get update -qq && apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
-FROM scratch
-
-LABEL NAME="vasylkosiv/hw1"
-LABEL VERSION="0.0.1"
-LABEL MAINTAINER="VasCos"
-
-WORKDIR /hw1
-COPY --from=build /src/hw1 .
-
-ENTRYPOINT ["/hw1/hw1"]
-CMD ["987654321"]
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+RUN apt-get update -qq && apt-get install docker-ce=17.12.1~ce-0~debian -y
+RUN usermod -aG docker jenkins
