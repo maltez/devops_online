@@ -1,0 +1,36 @@
+version: "3.3"
+
+services: 
+    
+    bash-app:
+        image: lazyk/simple-bash-webserver:latest
+        container_name: bashserv
+        env_file: ./bashwebserv/.dev.env
+        restart: unless-stopped
+        ports: 
+            - 8080:8080
+        networks:
+            - bashnet
+        build:
+            context: ./bashwebserv
+            dockerfile: Dockerfile
+
+    go-app:
+        image: maltez/simple-go-webserver:latest
+        container_name: goserv
+        env_file: ./gowebserv/.dev.env
+        restart: unless-stopped
+        ports:
+           - 9000:9000
+        networks: 
+           - gonet
+        build:
+           context: ./gowebserv
+           dockerfile: Dockerfile
+
+networks:
+    bashnet:
+        driver: bridge
+    gonet:
+        driver: bridge
+        
