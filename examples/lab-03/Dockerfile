@@ -1,8 +1,8 @@
 FROM node:alpine3.10
 
-LABEL NAME="vasylkosiv/simple-node-server"
+LABEL NAME="maltez/simple-node-server"
 LABEL VERSION="0.0.1"
-LABEL MAINTAINER="VasCos"
+LABEL MAINTAINER="Nick Lototskiy"
 
 ENV HOST="0.0.0.0"
 ENV PORT="3000"
