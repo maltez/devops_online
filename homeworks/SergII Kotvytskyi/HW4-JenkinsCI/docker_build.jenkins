@@ -1,0 +1,63 @@
+#!groovy
+
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    environment {
+        git_repo = 'https://github.com/LazyK/devops_online.git'
+        git_dir = 'examples/lab-02'
+        registry = "lazyk/alpine-ping"
+        credId = 'dockerhub'
+    }
+    agent { 
+        label 'master'
+    }
+    triggers { pollSCM('* * * * *') }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        timestamps()
+    }
+    stages {
+        stage('Git Clone') {
+           steps {
+                git git_repo
+            }
+        }
+        stage("dockerhub login") {
+            steps {
+                echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: credId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                    docker login -u $USERNAME -p $PASSWORD
+                    '''
+                }
+            }
+        }
+        stage("create docker image") {
+            steps {
+                echo " ============== start building image =================="
+                dir (git_dir) {
+                	sh '''
+                    docker build -t $registry:$BUILD_NUMBER . 
+                    '''
+                }
+            }
+        }
+        stage("docker push") {
+            steps {
+                echo " ============== start pushing image =================="
+                    sh '''
+                    docker push $registry:$BUILD_NUMBER
+                    '''
+            }
+        }
+        stage('Remove local docker image') {
+            steps{
+                echo " ============== start remove local image =================="
+                    sh '''
+                    docker rmi $registry:$BUILD_NUMBER
+                     '''
+            }
+        }
+    }
+}
