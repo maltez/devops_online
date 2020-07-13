@@ -1,29 +1,37 @@
-# Простой "веб-сервер" с использованием утилиты netcat
+
 FROM alpine:3.12
 
 LABEL VERSION="0.0.1"
 LABEL MAINTAINER="Poddubetskyi Volodymyr"
 LABEL NAME="poddubetskyi/hw-01-docker-basics"
-
-ENV HOST="0.0.0.0"
-ENV PORT="8880"
-
-# Установка netcat: https://github.com/subfuzion/docker-netcat/blob/master/Dockerfile
-RUN apk add --no-cache netcat-openbsd
-
-WORKDIR /hello_app
-
-COPY [ "hello_app/hello.sh", "./" ]
-
-RUN ["chmod", "+x", "/hello_app/hello.sh"]
-
+# Объявить использование аргументов с указанными именами
+# как параметров сборки образа
+ARG HOST
+ARG PORT
+# Присвоить используемым аргументам значения по умолчанию
+# на случай, если они не переданы из командной строки
+# во время сборки образа 
+ARG HOST=${HOST:-"0.0.0.0"}
+ARG PORT=${PORT:-8880}
+# Использовать значения аргументов в качестве значений
+# переменных окружения в создаваемом образе
+ENV HOST=${HOST}
+ENV PORT=${PORT}
+# Декларировать использование порта с номером,
+# переданным в аргументе с именем PORT
+# как используемого в создаваемом образе
+# для приема внешних соединений 
 EXPOSE ${PORT}
+# Определить текущий рабочий каталог образа
+WORKDIR /hello_app
+# Копировать файл "приложения" в текущий рабочий каталог образа
+COPY [ "hello_app/hello.sh", "./" ]
+# Установить подходящую версию утилиты netcat
+# и добавить атрибут "исполняемый" для файла
+# "приложения"
+RUN apk add --no-cache netcat-openbsd && chmod +x /hello_app/hello.sh
+# Команда отслеживания состояния работоспособности "приложения"
+HEALTHCHECK --interval=30s --timeout=3s --start-period=3s --retries=3 \
+  CMD [ "sh", "-c", "set -o pipefail ; echo healthcheck | nc -w 1 localhost ${PORT}" ]
 
 ENTRYPOINT [ "/hello_app/hello.sh" ]
-# Собрать образ: docker build --rm --file Dockerfile --tag poddubetskyi/hw-01-docker-basics:0.0.1 .
-# Запустить образ: docker run --name hw-01 --publish 8880:8880 poddubetskyi/hw-01-docker-basics:0.0.1
-# Протестировать из терминала хост-компьютера: printf "\r\n" | nc 127.0.0.1 8880
-# Протестировать в браузере: http://127.0.0.1:8880
-# Подключиться к консоли контейнера: docker exec --interactive --tty hw-01 /bin/sh
-# Остановить контейнер: docker stop hw-01
-# Удалить контейнер: docker container rm hw-01
