@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  phpinfo-app:
+    image: nmurzin/phpinfo-app:latest
+    restart: "no"
+    ports:
+      - 8080:8080
+    networks:
+      - php_network
+    build:
+      dockerfile: docker/php.Dockerfile
+      context: ./
+  go-app:
+    image: nmurzin/go-app:latest
+    restart: "no"
+    ports:
+      - 9000:9000
+    networks:
+      - go_network
+    build:
+      dockerfile: docker/go.Dockerfile
+      context: ./
+networks:
+  php_network:
+    driver: bridge
+  go_network:
+    driver: bridge
