@@ -21,3 +21,8 @@ variable "fargate_memory" {
 variable "app_image" {
   default = "nginx:latest"
 }
+
+variable "app_domain" {
+  type    = string
+  default = "devops_course_domain.local"
+}

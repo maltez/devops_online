@@ -9,11 +9,11 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = var.fargate_cpu
   memory                   = var.fargate_memory
   container_definitions = templatefile("./task_defenitions/chat.json", {
-    name: "app",
-    cpu    : var.fargate_cpu,
+    name : "app",
+    cpu : var.fargate_cpu,
     memory : var.fargate_memory,
-    image  : var.app_image,
-    port   : var.app_port
+    image : var.app_image,
+    port : var.app_port
   })
 }
 
@@ -33,6 +33,10 @@ resource "aws_ecs_service" "main" {
     container_name   = "app"
     container_port   = var.app_port
     target_group_arn = aws_alb_target_group.app.id
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.main.arn
   }
 
   depends_on = [aws_alb.main]
