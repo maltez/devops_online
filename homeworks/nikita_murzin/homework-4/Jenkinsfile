@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: "Branch", defaultValue: "master", description: "Name of needed git branch")
+    }
+    environment {
+        gitRepo = "https://github.com/nmurzin/test-assessment"
+    }
+    stages {
+	    stage('SCM clone') {
+	        steps {
+		        echo "### CLONING ${params.Branch} ###"
+
+		        git branch: "${params.Branch}",
+			        url: gitRepo
+
+		        echo "### CLONING COMPLETE ###"
+	        }
+	    }
+	    stage('Docker') {
+
+        }
+    }
+}
