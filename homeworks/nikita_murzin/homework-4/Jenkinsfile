@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: "Branch", defaultValue: "master", description: "Name of needed git branch")
+    }
+    environment {
+        gitRepo = "https://github.com/nmurzin/test-assessment"
+        dockerBasicImage = "php:7.4-alpine"
+        dockerImage = "nmurzin/test-assessment-env"
+        dockerImageTag = "0.0.${BUILD_NUMBER}"
+        dockerMaintainer = "Nikita Murzin"
+        dockerHubCredentials = 'hub.docker.com'
+    }
+    stages {
+	    stage('SCM clone app') {
+	        steps {
+		        echo "### CLONING ${params.Branch} ###"
+
+		        git branch: "${params.Branch}",
+			        url: gitRepo
+
+		        echo "### CLONING COMPLETE ###"
+	        }
+	    }
+	    stage('CREATE DOCKERFILE') {
+	        steps {
+                echo "### GENERATING DOCKERFILE... ###"
+
+                sh "echo FROM ${dockerBasicImage} >> Dockerfile"
+                sh "echo LABEL NAME = ${dockerImage} >> Dockerfile"
+                sh "echo LABEL MAINTAINER = ${dockerMaintainer} >> Dockerfile"
+                sh "echo LABEL VERSION = ${dockerImageTag} >> Dockerfile"
+                sh "echo COPY . /usr/src/app >> Dockerfile"
+                sh "echo WORKDIR /usr/src/app >> Dockerfile"
+                sh 'echo ENTRYPOINT [ "php" ] >> Dockerfile'
+                sh 'echo CMD [ "index.php" ] >> Dockerfile'
+
+                echo "### DOCKERFILE GENERATED! ###"
+	        }
+	    }
+	    stage('DOCKER BUILD') {
+	        steps {
+                echo "### BUILD IMAGE ${dockerImage} ###"
+	            sh "docker build -t ${dockerImage}:${dockerImageTag} ."
+	        }
+	    }
+	    stage('DOCKER RUN') {
+	        steps {
+        	    echo "### RUN IMAGE ${dockerImage} ###"
+                sh "docker run -t ${dockerImage}:${dockerImageTag} -v ./:/usr/src/app"
+            }
+	    }
+	    stage('DOCKER PUSH') {
+            steps {
+                echo "### PUSH IMAGE ${dockerImage} ###"
+                withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "docker login -u $USERNAME -p $PASSWORD"
+                    sh "docker push ${dockerImage}:${dockerImageTag}"
+                }
+            }
+        }
+    }
+}
+
