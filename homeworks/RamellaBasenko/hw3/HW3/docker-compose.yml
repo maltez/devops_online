@@ -26,7 +26,7 @@ services:
       my_net:
         ipv4_address: 172.14.100.100
     build:
-      context: ./my_app/
+      context: my_app
 
 
   maltez_go_app:
@@ -40,6 +40,6 @@ services:
       maltez_net:
         ipv4_address: 172.15.200.100
     build:
-      context: ./maltez_app/
+      context: maltez_app
 
 
