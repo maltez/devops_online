@@ -2,8 +2,8 @@ data "aws_ami" "aws_linux" {
   owners      = ["amazon"]
   most_recent = true
   filter {
-    name   = "image-id"
-    values = ["ami-016b213e65284e9c9"]
+    name   = "name"
+    values = ["amzn2-ami-hvm-2*"]
   }
 }
 
